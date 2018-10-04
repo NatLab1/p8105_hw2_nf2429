@@ -56,9 +56,38 @@ precip_stack <- rbind(
   mutate(
       precip_data_2017, month = month.name)) #make new dataset with 2016 and 2017 precipitation datasets stacked on top of each other, and change month number to month name
 
+#Make these into inline code:
+
 nrow(mr_trash_wheel) #285 observations
-mr_trash_wheel %>% filter(year == "2017") %>% summarise(median(sports_balls)) #median number of sports balls picked up in 2017 was 8
+mr_trash_wheel %>% filter(year == "2016") %>% summarise(median(sports_balls)) #median number of sports balls picked up in 2016 was 26
 
 nrow(precip_stack) #24 observations
 precip_stack %>% filter(year == "2017") %>% summarise(sum(total)) #32.93 inches of rain total
+```
+
+#Problem 3
+```{r}
+brfss_data <- p8105.datasets::brfss_smart2010 %>%
+  janitor::clean_names() %>%
+  rename(state = locationabbr, county = locationdesc) %>%
+  filter(topic == "Overall Health") %>%
+  select(-(class:question), -sample_size, -(confidence_limit_low:geo_location))
+  #import and clean data, filter topic, exclude variables
+
+brfss_data <- brfss_data %>%
+  spread(key = response, value = data_value) %>%
+  janitor::clean_names() %>%
+  mutate(p_excellent_vgood = (excellent + very_good) / (excellent + very_good + good + fair + poor))
+#make each response type its own column, clean names, add variable that is the proportion of excellent and very good responses.
+
+
+nrow(distinct(brfss_data, county)) #404 distinct locations designated by county
+nrow(distinct(brfss_data, state)) #51 states - includes DC
+
+count(brfss_data, state) %>%
+  filter(n == max(n)) #New Jersey has the most entries - 146
+
+
+
+
 ```
