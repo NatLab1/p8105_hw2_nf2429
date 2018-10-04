@@ -9,3 +9,18 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+#Problem 1
+```{r}
+library(tidyverse)
+transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% #data import
+janitor::clean_names() %>% #format variable names so they are all lowercase snake
+select(line:entry, vending, ada) %>%  #keep only these variables
+mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE)) #recode the entry variable
+
+#These data aren't necessarily tidy as they are right now. Currently, there are 19 variables (columns) and 1868 rows. The variable names are all formatted the same way and some variables have been discarded, but the routes 1-11 variables don't say much about the dataset unless you already know that the more routes the station services, the more columns that station will have filled in. This is not a good way of organizing and expressing this data. 
+
+nrow(distinct(transit_data, line, station_name)) #how many distinct stations are there? 465.
+nrow(filter(distinct(transit_data, line, station_name, ada), ada == TRUE)) #how many stations are ada compliant? 84.
+nrow(filter(transit_data, entry == TRUE, vending == "NO"))/nrow(filter(transit_data, vending == "NO")) #proportion of stations 
+
+```
