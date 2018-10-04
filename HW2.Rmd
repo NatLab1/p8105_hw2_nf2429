@@ -33,3 +33,18 @@ nrow(filter(distinct(transit_data_tidy, line, station_name, route, ada), route =
 ```
 
 #Problem 2
+```{r}
+library(readxl)
+mr_trash_wheel = read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "Mr. Trash Wheel", range = "A2:N258") #import mr trash wheel datasheet from cell A2 to N258.
+mr_trash_wheel
+
+
+
+
+
+
+
+
+
+
+```
