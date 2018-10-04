@@ -35,31 +35,26 @@ nrow(filter(distinct(transit_data_tidy, line, station_name, route, ada), route =
 #Problem 2
 ```{r}
 library(readxl)
-mr_trash_wheel = read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "Mr. Trash Wheel", range = "A2:N258") %>% #import mr trash wheel datasheet from cell A2 to N258
+mr_trash_wheel = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "Mr. Trash Wheel", range = "A2:N338") %>% #import mr trash wheel datasheet from cell A2 to N258
 janitor::clean_names() %>% #clean up names of variables
   filter(!is.na(dumpster)) %>% #filter out dumpster totals
   mutate(sports_balls = round(sports_balls)) %>% #round 
   mutate(sports_balls = as.integer(sports_balls)) #make it an integer
 
-precip_data_2016 = read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "2016 Precipitation", range = "A2:B14") %>%
-  janitor::clean_names()
+precip_data_2016 = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "2016 Precipitation", range = "A2:B14") %>%
+  janitor::clean_names() %>%
+  mutate(year = 2016)
   
-precip_data_2017 = read_excel("./data/HealthyHarborWaterWheelTotals2017-9-26.xlsx", "2017 Precipitation", range = "A2:B14") %>%
+precip_data_2017 = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "2017 Precipitation", range = "A2:B14") %>%
   janitor::clean_names() %>%
   filter(!is.na(total)) %>%
+  mutate(year = 2017)
 
-
-left_join(precip_data_2016, precip_data_2017)
-
-
-  
-
-
-
-
-
-
-
+precip_stack <- rbind(
+  mutate(
+    precip_data_2016, month = month.name), 
+  mutate(
+      precip_data_2017, month = month.name))
 
 
 
