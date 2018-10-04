@@ -43,21 +43,22 @@ janitor::clean_names() %>% #clean up names of variables
 
 precip_data_2016 = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "2016 Precipitation", range = "A2:B14") %>%
   janitor::clean_names() %>%
-  mutate(year = 2016)
+  mutate(year = 2016) #add a year column
   
 precip_data_2017 = read_excel("./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "2017 Precipitation", range = "A2:B14") %>%
   janitor::clean_names() %>%
-  filter(!is.na(total)) %>%
-  mutate(year = 2017)
+  filter(!is.na(total)) %>% #filter out months with no data
+  mutate(year = 2017) #add year column
 
 precip_stack <- rbind(
   mutate(
     precip_data_2016, month = month.name), 
   mutate(
-      precip_data_2017, month = month.name))
+      precip_data_2017, month = month.name)) #make new dataset with 2016 and 2017 precipitation datasets stacked on top of each other, and change month number to month name
 
+nrow(mr_trash_wheel) #285 observations
+mr_trash_wheel %>% filter(year == "2017") %>% summarise(median(sports_balls)) #median number of sports balls picked up in 2017 was 8
 
-
-
-
+nrow(precip_stack) #24 observations
+precip_stack %>% filter(year == "2017") %>% summarise(sum(total)) #32.93 inches of rain total
 ```
