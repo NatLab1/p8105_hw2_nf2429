@@ -21,6 +21,15 @@ mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE)) #recode the entry vari
 
 nrow(distinct(transit_data, line, station_name)) #how many distinct stations are there? 465.
 nrow(filter(distinct(transit_data, line, station_name, ada), ada == TRUE)) #how many stations are ada compliant? 84.
-nrow(filter(transit_data, entry == TRUE, vending == "NO"))/nrow(filter(transit_data, vending == "NO")) #proportion of stations 
+nrow(filter(transit_data, entry == TRUE, vending == "NO"))/nrow(filter(transit_data, vending == "NO")) #proportion of stations with entry but no vending machine = 0.377
 
+transit_data_tidy = (gather(transit_data, key = route_number, value = route, route1:route11)) #new dataframe where route number and route name are two variables
+transit_data_tidy
+
+nrow(filter(distinct(transit_data_tidy, line, station_name, route), route == "A"))
+#60 stations on the A line
+
+nrow(filter(distinct(transit_data_tidy, line, station_name, route, ada), route == "A", ada == TRUE)) #of those 60, only 17 are ADA compliant. SAD!
 ```
+
+#Problem 2
