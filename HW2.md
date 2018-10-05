@@ -91,6 +91,7 @@ Plots
 
 ``` r
 #histogram
+
 brfss_data %>%
   filter(year == "2002") %>%
   ggplot(aes(x = excellent)) +
@@ -104,6 +105,7 @@ brfss_data %>%
 
 ``` r
 #scatter plot
+
 brfss_data %>%
   filter(county %in% c("NY - Queens County", "NY - New York County")) %>%
   mutate(p_excellent = excellent 
@@ -111,10 +113,7 @@ brfss_data %>%
   ggplot(aes(x = year, y = p_excellent, color = county)) +
   geom_point(size = 3) +
   labs(x = "Year", y = "proportion", 
-       caption = "Proportion of excellent responses in Queens and NY Counties, 2002-2010") +
-viridis::scale_color_viridis(
-    labels = c("Queens County", "New York County"),
-    discrete = TRUE)
+       caption = "Proportion of excellent responses in Queens and NY Counties, 2002-2010") 
 ```
 
 ![](HW2_files/figure-markdown_github/unnamed-chunk-5-2.png)
