@@ -87,7 +87,27 @@ nrow(distinct(brfss_data, state)) #51 states - includes DC
 count(brfss_data, state) %>%
   filter(n == max(n)) #New Jersey has the most entries - 146
 
+brfss_data %>% 
+  filter(year == "2002") %>%
+  summarise(median(excellent, na.rm = TRUE)) #median of excellent responses in 2002 is 23.6.
+
+brfss_data %>%
+  filter(year == "2002") %>%
+  ggplot(aes(x = excellent)) +
+  geom_histogram(binwidth = 0.5) +
+  labs(x = "Excellent", y = "frequency", title = "Excellent responses in 2002")
+
+
+  
+
+
+
 
 
 
 ```
+
+```{r}
+
+```
+
