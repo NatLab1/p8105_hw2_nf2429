@@ -97,17 +97,18 @@ brfss_data %>%
   geom_histogram(binwidth = 0.5) +
   labs(x = "Excellent", y = "frequency", title = "Excellent responses in 2002")
 
-
-  
-
-
-
-
-
+brfss_data %>%
+  filter(county %in% c("NY - Queens County", "NY - New York County")) %>%
+  mutate(p_excellent = excellent /  (excellent + very_good + good + fair + poor)) %>% 
+  ggplot(aes(x = year, y = p_excellent, color = county)) +
+  geom_point(size = 3) +
+  labs(x = "Year", y = "proportion", caption = "Proportion of excellent responses in Queens and NY Counties, 2002-2010")
+  viridis::scale_color_viridis(
+    labels = c("Queens County", "New York County"),
+    discrete = TRUE
+  )
 
 ```
 
-```{r}
 
-```
 
