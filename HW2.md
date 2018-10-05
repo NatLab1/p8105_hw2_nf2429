@@ -1,16 +1,12 @@
----
-title: "Data Science HW2"
-author: "Nathalie Fadel"
-date: "10/4/2018"
-output: github_document
----
+Data Science HW2
+================
+Nathalie Fadel
+10/4/2018
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
+Problem 1
+=========
 
-#Problem 1
-```{r, message = FALSE}
+``` r
 library(tidyverse)
 transit_data = read_csv(file = "./data/NYC_Transit_Subway_Entrance_And_Exit_Data.csv") %>% #data import
 janitor::clean_names() %>% 
@@ -21,20 +17,21 @@ mutate(entry = recode(entry, "YES" = TRUE, "NO" = FALSE))
 #recode the entry variable
 ```
 
-These data aren't tidy as they are right now. Currently, there are 19 variables (columns) and 1868 observations (rows). I made the variable names all lowercase snake and eliminated all variables except for "line"" through "entry," "vending,"" and "ada". At first it is hard to tell what the "routes" variables 1-11 say about the dataset. Then I realized that the more routes the station services, the more columns that station will have filled in. This is not a good way of organizing and expressing this data. 
+These data aren't tidy as they are right now. Currently, there are 19 variables (columns) and 1868 observations (rows). I made the variable names all lowercase snake and eliminated all variables except for "line"" through "entry," "vending,"" and "ada". At first it is hard to tell what the "routes" variables 1-11 say about the dataset. Then I realized that the more routes the station services, the more columns that station will have filled in. This is not a good way of organizing and expressing this data.
 
-There are `r nrow(distinct(transit_data, line, station_name))` distinct stations.
-`r nrow(filter(distinct(transit_data, line, station_name, ada), ada == TRUE))` stations are ADA compliant. The proportion of stations with entry but no vending machine is `r nrow(filter(transit_data, entry == TRUE, vending == "NO"))/nrow(filter(transit_data, vending == "NO"))`.
+There are 465 distinct stations. 84 stations are ADA compliant. The proportion of stations with entry but no vending machine is 0.3770492.
 
-```{r}
+``` r
 transit_data_tidy = (gather(transit_data, key = route_number, value = route, route1:route11)) 
 #new dataframe where route number is one variable instead of 12 variables.
 ```
 
-There are `r nrow(filter(distinct(transit_data_tidy, line, station_name, route), route == "A"))` stations on the A line. Of these 60, only `r nrow(filter(distinct(transit_data_tidy, line, station_name, route, ada), route == "A", ada == TRUE))` are ADA compliant.
+There are 60 stations on the A line. Of these 60, only 17 are ADA compliant.
 
-#Problem 2
-```{r}
+Problem 2
+=========
+
+``` r
 library(readxl)
 mr_trash_wheel = read_excel(
   "./data/HealthyHarborWaterWheelTotals2018-7-28.xlsx", "Mr. Trash Wheel", range = "A2:N338") %>% 
@@ -63,12 +60,14 @@ precip_stack <- rbind(
 #make new dataset with 2016 and 2017 precipitation datasets stacked on top of each other, and change month number to month name
 ```
 
-The Mr. Trash Wheel dataset has `r nrow(mr_trash_wheel)` observations. The median number of sports balls in the trash in 2016 was `r mr_trash_wheel %>% filter(year == "2016") %>% summarise(median(sports_balls))`.
+The Mr. Trash Wheel dataset has 285 observations. The median number of sports balls in the trash in 2016 was 26.
 
-The combined 2016 and 2017 precipitation dataset has `r nrow(precip_stack)` observations. It rained a total of `r precip_stack %>% filter(year == "2017") %>% summarise(sum(total))` inches in 2017.
+The combined 2016 and 2017 precipitation dataset has 24 observations. It rained a total of 32.93 inches in 2017.
 
-#Problem 3
-```{r}
+Problem 3
+=========
+
+``` r
 brfss_data <- p8105.datasets::brfss_smart2010 %>%
   janitor::clean_names() %>%
   rename(state = locationabbr, county = locationdesc) %>%
@@ -85,17 +84,25 @@ brfss_data <- brfss_data %>%
  #add variable that is the proportion of excellent and very good responses.
 ```
 
-There are `r nrow(distinct(brfss_data, county))` distinct locations in the dataset, designated by county. The dataset has `r nrow(distinct(brfss_data, state))` states, including Washington, D.C. The state with the largest number of response values is `r count(brfss_data, state) %>% filter(n == max(n))`. The median of excellent responses in 2002 was `r brfss_data %>% filter(year == "2002") %>% summarise(median(excellent, na.rm = TRUE))`.
+There are 404 distinct locations in the dataset, designated by county. The dataset has 51 states, including Washington, D.C. The state with the largest number of response values is NJ, 146. The median of excellent responses in 2002 was 23.6.
 
-##Plots
-```{r, message = FALSE}
+Plots
+-----
+
+``` r
 #histogram
 brfss_data %>%
   filter(year == "2002") %>%
   ggplot(aes(x = excellent)) +
   geom_histogram(binwidth = 0.5, fill = "purple") +
   labs(x = "Excellent", y = "frequency", title = "Excellent responses in 2002")
+```
 
+    ## Warning: Removed 2 rows containing non-finite values (stat_bin).
+
+![](HW2_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+``` r
 #scatter plot
 brfss_data %>%
   filter(county %in% c("NY - Queens County", "NY - New York County")) %>%
@@ -110,5 +117,4 @@ viridis::scale_color_viridis(
     discrete = TRUE)
 ```
 
-
-
+![](HW2_files/figure-markdown_github/unnamed-chunk-5-2.png)
